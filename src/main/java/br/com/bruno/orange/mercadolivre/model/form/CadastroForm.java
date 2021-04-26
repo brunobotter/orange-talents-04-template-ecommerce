@@ -2,6 +2,7 @@ package br.com.bruno.orange.mercadolivre.model.form;
 
 import br.com.bruno.orange.mercadolivre.model.ConverterSenha;
 import br.com.bruno.orange.mercadolivre.model.Usuario;
+import br.com.bruno.orange.mercadolivre.validation.UniqueValue;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
@@ -13,6 +14,7 @@ public class CadastroForm {
     @NotBlank
     @NotNull
     @Email
+    @UniqueValue(domainClass = Usuario.class, fieldName = "email", message = "O email ja existe no banco de dados!")
     private String email;
 
     @Length(min = 6)
