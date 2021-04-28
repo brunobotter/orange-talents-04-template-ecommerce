@@ -1,31 +1,45 @@
 package br.com.bruno.orange.mercadolivre.controller;
 
-import br.com.bruno.orange.mercadolivre.model.Usuario;
-import br.com.bruno.orange.mercadolivre.model.dto.LoginDao;
+import br.com.bruno.orange.mercadolivre.model.dto.TokenDto;
 import br.com.bruno.orange.mercadolivre.model.form.CadastroForm;
+import br.com.bruno.orange.mercadolivre.model.form.LoginForm;
+import br.com.bruno.orange.mercadolivre.security.TokenService;
+import org.apache.coyote.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/auth")
 public class LoginController {
 
-    @PersistenceContext
-    private EntityManager manager;
+    @Autowired
+    private AuthenticationManager auth;
+
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping
-    @Transactional
-    public ResponseEntity<LoginDao> cadastrar(@RequestBody @Valid CadastroForm form){
-            Usuario usuario = form.toModel();
-            manager.persist(usuario);
-            return ResponseEntity.ok(new LoginDao(usuario));
+    public ResponseEntity<?> autenticar(@RequestBody @Valid LoginForm login){
+        try{
+        //Converto os dados que vem do request em um UsernamePasswordAuthenticationToken
+        UsernamePasswordAuthenticationToken dadosLogin = login.converter();
+        //Verifico se o usuario corresponde com algum do banco e se a senha esta encriptada
+        Authentication autenticate = auth.authenticate(dadosLogin);
+        //gero o token
+        String token = tokenService.gerarToken(autenticate);
+        return ResponseEntity.ok(new TokenDto(token, "Bearer "));
+        }catch (AuthenticationException e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

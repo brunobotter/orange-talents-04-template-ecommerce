@@ -1,6 +1,7 @@
 package br.com.bruno.orange.mercadolivre.model.form;
 
 import br.com.bruno.orange.mercadolivre.model.Categoria;
+import br.com.bruno.orange.mercadolivre.validation.ExisteId;
 import br.com.bruno.orange.mercadolivre.validation.UniqueValue;
 
 import javax.persistence.EntityManager;
@@ -14,6 +15,7 @@ public class CategoriaForm {
     private String nome;
 
     @Positive
+    @ExisteId(domainClass = Categoria.class,fieldName = "id", message = "Id da categoria nao existe!")
     private Long idCategoriaMae;
 
     public Categoria toModel(EntityManager manager) {
