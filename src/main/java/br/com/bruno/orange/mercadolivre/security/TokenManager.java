@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Component
-public class TokenService {
+public class TokenManager {
 
     @Value("${forum.jwt.expiration}")
     private String expiration;

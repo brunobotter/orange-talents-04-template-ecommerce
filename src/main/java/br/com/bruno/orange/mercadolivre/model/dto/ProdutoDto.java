@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class ProdutoDto {
 
-
+    private Long id;
     private String nome;
     private BigDecimal valor;
     private int quantidade;
@@ -33,6 +33,7 @@ public class ProdutoDto {
     }
 
     public ProdutoDto(Produto produto) {
+        this.id = produto.getId();
         this.nome = produto.getNome();
         this.valor = produto.getValor();
         this.quantidade = produto.getQuantidade();
@@ -61,6 +62,10 @@ public class ProdutoDto {
 
     public String getNomeCategoria() {
         return nomeCategoria;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public List<CaracteristicaDto> getCaracteristicas() {

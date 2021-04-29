@@ -4,6 +4,7 @@ import br.com.bruno.orange.mercadolivre.model.Usuario;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -11,8 +12,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
-@Service
-public class AutenticacaoService implements UserDetailsService {
+@Component
+public class AutenticacaoManager implements UserDetailsService {
 
     @PersistenceContext
     private EntityManager manager;

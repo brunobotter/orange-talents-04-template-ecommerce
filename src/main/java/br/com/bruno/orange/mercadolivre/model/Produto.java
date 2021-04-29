@@ -2,6 +2,7 @@ package br.com.bruno.orange.mercadolivre.model;
 
 import br.com.bruno.orange.mercadolivre.model.form.CaracteristicasForm;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -37,6 +38,9 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
     private Set<CaracteristicaProduto> caracteristicas = new HashSet<>();
 
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private Set<ImagemProduto> imagens = new HashSet<>();
+
     @Deprecated
     public Produto() {
     }
@@ -52,7 +56,7 @@ public class Produto {
         this.usuario = usuario;
         this.caracteristicas.addAll(caracteristicas.stream().map(
                 caracteristica -> caracteristica.toModel(this)).collect(Collectors.toSet()));
-
+        Assert.isTrue(this.caracteristicas.size() >= 3, "Todo produto tem de ter mais de 3 caracterisricas");
 
     }
 
@@ -100,5 +104,14 @@ public class Produto {
     @Override
     public int hashCode() {
         return Objects.hash(getNome());
+    }
+
+    public void associaImagens(Set<String> links) {
+        Set<ImagemProduto> imagensAssociadas = links.stream().map(link -> new ImagemProduto(this,link)).collect(Collectors.toSet());
+        this.imagens.addAll(imagensAssociadas);
+    }
+
+    public boolean pertenceAoUsuario(Usuario usuarioPertenceProduto) {
+        return this.usuario.equals(usuarioPertenceProduto);
     }
 }

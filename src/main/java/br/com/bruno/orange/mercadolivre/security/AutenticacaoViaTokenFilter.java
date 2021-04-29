@@ -5,7 +5,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,18 +13,18 @@ import java.io.IOException;
 
 public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 
-    private TokenService tokenService;
-    private AutenticacaoService autenticacaoService;
+    private TokenManager tokenManager;
+    private AutenticacaoManager autenticacaoManager;
 
-    public AutenticacaoViaTokenFilter(TokenService tokenService, AutenticacaoService autenticacaoService) {
-        this.tokenService = tokenService;
-        this.autenticacaoService = autenticacaoService;
+    public AutenticacaoViaTokenFilter(TokenManager tokenManager, AutenticacaoManager autenticacaoManager) {
+        this.tokenManager = tokenManager;
+        this.autenticacaoManager = autenticacaoManager;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = recuperarToken(request);
-        boolean valido = tokenService.isTokenValido(token);
+        boolean valido = tokenManager.isTokenValido(token);
         if(valido) {
             autenticarCliente(token);
         }
@@ -33,8 +32,8 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
     }
 
     private void autenticarCliente(String token) {
-        Long idUsuario = tokenService.getIdUsuario(token);
-        Usuario usuario = autenticacaoService.findById(idUsuario);
+        Long idUsuario = tokenManager.getIdUsuario(token);
+        Usuario usuario = autenticacaoManager.findById(idUsuario);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
