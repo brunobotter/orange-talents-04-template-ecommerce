@@ -30,6 +30,8 @@ public class CategoriaDto {
     public CategoriaDto(Categoria categoria) {
         this.idCategoria = categoria.getId();
         this.nomeCategoria = categoria.getNome();
-        this.nomeCategoriaMae = categoria.getCategoriaMae().getNome();
+        if(categoria.getCategoriaMae() != null){
+            this.nomeCategoriaMae = categoria.getCategoriaMae().getNome();
+        }
     }
 }

@@ -15,7 +15,6 @@ public class CategoriaForm {
     private String nome;
 
     @Positive
-    @ExisteId(domainClass = Categoria.class,fieldName = "id", message = "Id da categoria nao existe!")
     private Long idCategoriaMae;
 
     public Categoria toModel(EntityManager manager) {
