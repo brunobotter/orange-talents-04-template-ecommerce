@@ -1,16 +1,20 @@
 package br.com.bruno.orange.mercadolivre.controller;
 
+import br.com.bruno.orange.mercadolivre.model.Opniao;
 import br.com.bruno.orange.mercadolivre.model.Produto;
 import br.com.bruno.orange.mercadolivre.model.UploadFake;
 import br.com.bruno.orange.mercadolivre.model.Usuario;
+import br.com.bruno.orange.mercadolivre.model.dto.OpniaoDto;
 import br.com.bruno.orange.mercadolivre.model.dto.ProdutoDto;
 import br.com.bruno.orange.mercadolivre.model.form.ImagemForm;
+import br.com.bruno.orange.mercadolivre.model.form.OpniaoForm;
 import br.com.bruno.orange.mercadolivre.model.form.ProdutoForm;
 import br.com.bruno.orange.mercadolivre.validation.ProibeCaracteristicasComNomeIgualValdiator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,7 +28,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("produto")
+@RequestMapping()
 public class ProdutoController {
     @Autowired
     private UploadFake uploadFake;
@@ -38,7 +42,7 @@ public class ProdutoController {
     }
 
 
-    @PostMapping
+    @PostMapping("produto")
     @Transactional
     public ResponseEntity<ProdutoDto> salvar(@RequestBody @Valid ProdutoForm form, @AuthenticationPrincipal Usuario usuarioLogado){
         Usuario usuario = usuarioLogado;
@@ -48,7 +52,7 @@ public class ProdutoController {
     }
 
 
-    @PostMapping("/{id}/imagem")
+    @PostMapping("produto/{id}/imagem")
     @Transactional
     public void adicionaImagens(@PathVariable("id") Long id, @Valid ImagemForm form, @AuthenticationPrincipal Usuario usuarioLogado){
     /*
@@ -59,7 +63,7 @@ public class ProdutoController {
     * 5 - depois que associar preciso atualizar a nova versao do produto
     * */
         Usuario usuario = usuarioLogado;
-        Set<String> links = uploadFake.enviar(form.getImagens());
+        Set<String> links = uploadFake.envia(form.getImagens());
         Produto produto = manager.find(Produto.class, id);
         if(!produto.pertenceAoUsuario(usuarioLogado)){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -68,10 +72,14 @@ public class ProdutoController {
         manager.merge(produto);
     }
 
-    @GetMapping
+
+
+    @GetMapping("produto")
     public ResponseEntity<List<ProdutoDto>> exibeTodos(){
         List<Produto> produto = manager.createQuery("select u from Produto u").getResultList();
         List<ProdutoDto> dto = produto.stream().map(lista -> new ProdutoDto(lista)).collect(Collectors.toList());
         return ResponseEntity.ok(dto);
     }
+
+
 }

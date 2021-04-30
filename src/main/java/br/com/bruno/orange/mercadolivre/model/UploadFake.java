@@ -9,8 +9,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class UploadFake {
-    public Set<String> enviar(List<MultipartFile> imagens) {
+public class UploadFake implements  Uploader{
+
+    @Override
+    public Set<String> envia(List<MultipartFile> imagens) {
         return imagens.stream().map(imagem -> "http://bucket.io/"
                 +imagem.getOriginalFilename()).collect(Collectors.toSet());
     }

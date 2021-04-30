@@ -41,6 +41,9 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
     private Set<ImagemProduto> imagens = new HashSet<>();
 
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private List<Opniao> opnioes = new ArrayList<>();
+
     @Deprecated
     public Produto() {
     }
@@ -98,12 +101,12 @@ public class Produto {
         if (this == o) return true;
         if (!(o instanceof Produto)) return false;
         Produto produto = (Produto) o;
-        return getNome().equals(produto.getNome());
+        return getQuantidade() == produto.getQuantidade() && Objects.equals(getId(), produto.getId()) && Objects.equals(getNome(), produto.getNome()) && Objects.equals(getDescricao(), produto.getDescricao()) && Objects.equals(getValor(), produto.getValor()) && Objects.equals(getUsuario(), produto.getUsuario()) && Objects.equals(getCategoria(), produto.getCategoria()) && Objects.equals(getCaracteristicas(), produto.getCaracteristicas()) && Objects.equals(imagens, produto.imagens) && Objects.equals(opnioes, produto.opnioes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getNome());
+        return Objects.hash(getId(), getNome(), getQuantidade(), getDescricao(), getValor(), getUsuario(), getCategoria(), getCaracteristicas(), imagens, opnioes);
     }
 
     public void associaImagens(Set<String> links) {
@@ -112,6 +115,8 @@ public class Produto {
     }
 
     public boolean pertenceAoUsuario(Usuario usuarioPertenceProduto) {
-        return this.usuario.equals(usuarioPertenceProduto);
+        return this.usuario.getEmail().equals(usuarioPertenceProduto.getEmail());
     }
+
+
 }
