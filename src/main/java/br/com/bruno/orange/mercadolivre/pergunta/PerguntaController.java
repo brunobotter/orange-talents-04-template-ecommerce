@@ -1,7 +1,9 @@
 package br.com.bruno.orange.mercadolivre.pergunta;
 
+import br.com.bruno.orange.mercadolivre.email.Email;
 import br.com.bruno.orange.mercadolivre.produto.Produto;
 import br.com.bruno.orange.mercadolivre.usuario.Usuario;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +23,9 @@ public class PerguntaController {
     @PersistenceContext
     private EntityManager manager;
 
+    @Autowired
+    private Email email;
+
     @PostMapping("produto/{id}/pergunta")
     @Transactional
     public ResponseEntity<PerguntaDto> pergunta
@@ -33,6 +38,7 @@ public class PerguntaController {
         }
         Pergunta pergunta = form.toModel(usuario, produto);
         manager.persist(pergunta);
+        email.novaPergunta(pergunta);
         return ResponseEntity.ok(new PerguntaDto(pergunta));
     }
 }

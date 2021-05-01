@@ -153,4 +153,15 @@ public class Produto {
         }
         return total.divide(BigDecimal.valueOf(elementos));
     }
+
+    public boolean diminuiEstoque(int quantidade) {
+        Assert.isTrue(quantidade > 0,"A quantidade deve ser maior que zero "+ quantidade);
+      if(quantidade <= this.quantidade){
+        this.quantidade -= quantidade;
+        return true;
+      }else{
+          return false;
+      }
+
+      }
 }
