@@ -1,7 +1,7 @@
 package br.com.bruno.orange.mercadolivre;
 
-import br.com.bruno.orange.mercadolivre.model.Categoria;
-import br.com.bruno.orange.mercadolivre.model.form.CategoriaForm;
+import br.com.bruno.orange.mercadolivre.categoria.Categoria;
+import br.com.bruno.orange.mercadolivre.categoria.CategoriaForm;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -1,12 +1,11 @@
 package br.com.bruno.orange.mercadolivre;
 
-import br.com.bruno.orange.mercadolivre.model.Categoria;
-import br.com.bruno.orange.mercadolivre.model.ConverterSenha;
-import br.com.bruno.orange.mercadolivre.model.Produto;
-import br.com.bruno.orange.mercadolivre.model.Usuario;
-import br.com.bruno.orange.mercadolivre.model.form.CaracteristicasForm;
-import br.com.bruno.orange.mercadolivre.model.form.CategoriaForm;
-import br.com.bruno.orange.mercadolivre.model.form.ProdutoForm;
+import br.com.bruno.orange.mercadolivre.categoria.Categoria;
+import br.com.bruno.orange.mercadolivre.usuario.ConverterSenha;
+import br.com.bruno.orange.mercadolivre.produto.Produto;
+import br.com.bruno.orange.mercadolivre.usuario.Usuario;
+import br.com.bruno.orange.mercadolivre.produto.CaracteristicasForm;
+import br.com.bruno.orange.mercadolivre.produto.ProdutoForm;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
