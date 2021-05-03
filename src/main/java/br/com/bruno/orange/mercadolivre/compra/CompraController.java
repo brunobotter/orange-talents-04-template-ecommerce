@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 @RestController
-@RequestMapping("compra")
+@RequestMapping()
 public class CompraController {
 
     @PersistenceContext
@@ -23,14 +23,14 @@ public class CompraController {
     private Email email;
 
 
-    @PostMapping()
+    @PostMapping("compra")
     @Transactional
     public ResponseEntity<CompraDto> salvar(@RequestBody CompraForm form,
                                             @AuthenticationPrincipal Usuario usuarioLogado, UriComponentsBuilder uri) throws Exception {
         Compra compra = form.toModel(usuarioLogado, manager);
         manager.persist(compra);
         email.novaCompra(compra);
-        if(compra.getGateway().equals(Gateway.PAGSEGURO)){
+        if(compra.getGateway().equals(Gateway.pagseguro)){
             String url = "/pagseguro.com/"+compra.getId()+"&redirectUrl="+uri.path("/pagseguro.com?returnId={id}").buildAndExpand(compra.getId()).toString();
             return ResponseEntity.ok(new CompraDto(compra,url));
         }else{
